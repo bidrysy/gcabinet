@@ -1,0 +1,49 @@
+﻿@using GestionCabinetAvocat.DAO
+
+@{
+    ViewBag.Title = "List";
+}
+
+<h2>List</h2>
+
+@if ((ViewBag.LoggedUser as Compte).TypeCompte == "Adminstrateur")
+{
+    @Html.ActionLink("Ajouter un nouveau compte", "Create", null, new { @class = "btn btn-default" })
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Prénom</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Email</th>
+            <th scope="col">Type</th>
+            <th scope="col">Etat</th>
+            <th scope="col"></th>
+            @if ((ViewBag.LoggedUser as Compte).TypeCompte == "Adminstrateur")
+            {
+                <th scope="col"></th>
+                <th scope="col"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var compte in (ViewBag.Comptes as IEnumerable<Compte>))
+        {
+        <tr>
+            <td>@compte.Nom</td>
+            <td>@compte.Prenom</td>
+            <td>@compte.Email</td>
+            <td>@compte.TypeCompte</td>
+            <td>@compte.Etat</td>
+            <td>@Html.ActionLink("Voir Plus", "Detail", new { id = compte.Id })</td>
+           }
+            @if ((ViewBag.LoggedUser as Compte).TypeCompte =="Adminstrateur")
+            {
+                <td>@Html.ActionLink("Editer", "Edit", new { id = compte.Id })</td>
+                <td>@Html.ActionLink("Desactiver", "Deactivate", new { id = compte.Id })</td>
+            }
+        </tr>
+        }
+    </tbody>
+</table>

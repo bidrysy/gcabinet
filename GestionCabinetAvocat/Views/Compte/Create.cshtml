@@ -1,0 +1,64 @@
+﻿@using GestionCabinetAvocat.DAO
+@using GestionCabinetAvocat.ViewModels
+
+@model CreateAccountViewModel
+
+@{
+    ViewBag.Title = "Créer Nouveau Compte";
+}
+
+<h2>Nouveau Compte</h2>
+
+@using (Html.BeginForm("Create"))
+{
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.Compte.Nom)
+            @Html.TextBoxFor(model => model.Compte.Nom, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Compte.Nom, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.Compte.Prenom)
+            @Html.TextBoxFor(model => model.Compte.Prenom, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Compte.Prenom, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="form-group col-md-6">
+        @Html.LabelFor(model => model.Compte.Email)
+        @Html.TextBoxFor(model => model.Compte.Email, new { @class = "form-control" })
+        @Html.ValidationMessageFor(model => model.Compte.Email, (string)ViewBag.EmailError, new { @class = "text-danger" })
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.Compte.TypeCompte)
+            @Html.EnumDropDownListFor(model => model.Compte.TypeCompte, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Compte.TypeCompte, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.Compte.Etat)
+            @Html.DropDownListFor(model => model.Compte.Etat, (Model.AccountTypes as IEnumerable<Etat>).Select(e => new SelectListItem() { Text = e.ToString(), Value = e.ToString() }).AsEnumerable(), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Compte.Etat, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.Compte.MotDePasse)
+            @Html.PasswordFor(model => model.Compte.MotDePasse, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.Compte.MotDePasse, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group col-md-6">
+            @Html.LabelFor(model => model.RepeatMotDePasse)
+            @Html.PasswordFor(model => model.RepeatMotDePasse, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.RepeatMotDePasse, (string)ViewBag.RepeatMotDePasseError, new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group col-md-12">
+            <input class="btn btn-primary" type="submit" value="Créer le compte" />
+        </div>
+    </div>
+}

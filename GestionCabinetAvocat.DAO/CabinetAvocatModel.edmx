@@ -1,0 +1,539 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="CabinetAvocatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Adherent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Prenom" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Adresse" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="Adresse2" Type="varchar" MaxLength="150" />
+          <Property Name="Tel" Type="varchar" MaxLength="15" />
+          <Property Name="Email" Type="varchar" MaxLength="30" />
+          <Property Name="DateNaissance" Type="datetime" Nullable="false" />
+          <Property Name="DateCreation" Type="datetime" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="IdCompte" Type="int" Nullable="false" />
+          <Property Name="IdDossier" Type="int" Nullable="false" />
+          <Property Name="Etat" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Affaire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="Etat" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="IdDossier" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Compte">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="MotDePasse" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="150" />
+          <Property Name="Prenom" Type="varchar" MaxLength="150" />
+          <Property Name="TypeCompte" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="Etat" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Dossier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCompte" Type="int" />
+          <Property Name="DateCreation" Type="datetime" Nullable="false" />
+          <Property Name="Etat" Type="varchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Piece">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Descreption" Type="varchar" MaxLength="250" Nullable="false" />
+          <Property Name="path" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="IdProcedure" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ProcedureJuridique">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="500" />
+          <Property Name="DateCreation" Type="datetime" />
+          <Property Name="IdAffaire" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RendezVous">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nom" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Prenom" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="DateNaissance" Type="datetime" Nullable="false" />
+          <Property Name="NomJuriste" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="DateRdv" Type="datetime" Nullable="false" />
+          <Property Name="IdCompte" Type="int" />
+        </EntityType>
+        <Association Name="FK_Adherent_Compte">
+          <End Role="Compte" Type="Self.Compte" Multiplicity="1" />
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adherent">
+              <PropertyRef Name="IdCompte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adherent_Dossier">
+          <End Role="Dossier" Type="Self.Dossier" Multiplicity="1" />
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dossier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adherent">
+              <PropertyRef Name="IdDossier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Affaire_Dossier">
+          <End Role="Dossier" Type="Self.Dossier" Multiplicity="1" />
+          <End Role="Affaire" Type="Self.Affaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dossier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Affaire">
+              <PropertyRef Name="IdDossier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dossier_Compte">
+          <End Role="Compte" Type="Self.Compte" Multiplicity="0..1" />
+          <End Role="Dossier" Type="Self.Dossier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dossier">
+              <PropertyRef Name="IdCompte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Piece_ProcedureJuridique">
+          <End Role="ProcedureJuridique" Type="Self.ProcedureJuridique" Multiplicity="1" />
+          <End Role="Piece" Type="Self.Piece" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProcedureJuridique">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Piece">
+              <PropertyRef Name="IdProcedure" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProcedureJuridique_Affaire">
+          <End Role="Affaire" Type="Self.Affaire" Multiplicity="1" />
+          <End Role="ProcedureJuridique" Type="Self.ProcedureJuridique" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Affaire">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProcedureJuridique">
+              <PropertyRef Name="IdAffaire" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RendezVous_Compte">
+          <End Role="Compte" Type="Self.Compte" Multiplicity="0..1" />
+          <End Role="RendezVous" Type="Self.RendezVous" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RendezVous">
+              <PropertyRef Name="IdCompte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CabinetAvocatModelStoreContainer">
+          <EntitySet Name="Adherent" EntityType="Self.Adherent" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Affaire" EntityType="Self.Affaire" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Compte" EntityType="Self.Compte" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Dossier" EntityType="Self.Dossier" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Piece" EntityType="Self.Piece" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ProcedureJuridique" EntityType="Self.ProcedureJuridique" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RendezVous" EntityType="Self.RendezVous" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Adherent_Compte" Association="Self.FK_Adherent_Compte">
+            <End Role="Compte" EntitySet="Compte" />
+            <End Role="Adherent" EntitySet="Adherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adherent_Dossier" Association="Self.FK_Adherent_Dossier">
+            <End Role="Dossier" EntitySet="Dossier" />
+            <End Role="Adherent" EntitySet="Adherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Affaire_Dossier" Association="Self.FK_Affaire_Dossier">
+            <End Role="Dossier" EntitySet="Dossier" />
+            <End Role="Affaire" EntitySet="Affaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Dossier_Compte" Association="Self.FK_Dossier_Compte">
+            <End Role="Compte" EntitySet="Compte" />
+            <End Role="Dossier" EntitySet="Dossier" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Piece_ProcedureJuridique" Association="Self.FK_Piece_ProcedureJuridique">
+            <End Role="ProcedureJuridique" EntitySet="ProcedureJuridique" />
+            <End Role="Piece" EntitySet="Piece" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProcedureJuridique_Affaire" Association="Self.FK_ProcedureJuridique_Affaire">
+            <End Role="Affaire" EntitySet="Affaire" />
+            <End Role="ProcedureJuridique" EntitySet="ProcedureJuridique" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RendezVous_Compte" Association="Self.FK_RendezVous_Compte">
+            <End Role="Compte" EntitySet="Compte" />
+            <End Role="RendezVous" EntitySet="RendezVous" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CabinetAvocatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Adherent">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prenom" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Adresse" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Adresse2" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Tel" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="DateNaissance" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="DateCreation" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdCompte" Type="Int32" Nullable="false" />
+          <Property Name="IdDossier" Type="Int32" Nullable="false" />
+          <Property Name="Etat" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Compte" Relationship="Self.FK_Adherent_Compte" FromRole="Adherent" ToRole="Compte" />
+          <NavigationProperty Name="Dossier" Relationship="Self.FK_Adherent_Dossier" FromRole="Adherent" ToRole="Dossier" />
+        </EntityType>
+        <EntityType Name="Affaire">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Etat" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdDossier" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Dossier" Relationship="Self.FK_Affaire_Dossier" FromRole="Affaire" ToRole="Dossier" />
+          <NavigationProperty Name="ProcedureJuridique" Relationship="Self.FK_ProcedureJuridique_Affaire" FromRole="Affaire" ToRole="ProcedureJuridique" />
+        </EntityType>
+        <EntityType Name="Compte">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MotDePasse" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Nom" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Prenom" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="TypeCompte" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Etat" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Adherent" Relationship="Self.FK_Adherent_Compte" FromRole="Compte" ToRole="Adherent" />
+          <NavigationProperty Name="Dossier" Relationship="Self.FK_Dossier_Compte" FromRole="Compte" ToRole="Dossier" />
+          <NavigationProperty Name="RendezVous" Relationship="Self.FK_RendezVous_Compte" FromRole="Compte" ToRole="RendezVous" />
+        </EntityType>
+        <EntityType Name="Dossier">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCompte" Type="Int32" />
+          <Property Name="DateCreation" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Etat" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Adherent" Relationship="Self.FK_Adherent_Dossier" FromRole="Dossier" ToRole="Adherent" />
+          <NavigationProperty Name="Affaire" Relationship="Self.FK_Affaire_Dossier" FromRole="Dossier" ToRole="Affaire" />
+          <NavigationProperty Name="Compte" Relationship="Self.FK_Dossier_Compte" FromRole="Dossier" ToRole="Compte" />
+        </EntityType>
+        <EntityType Name="Piece">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Descreption" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="path" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IdProcedure" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="ProcedureJuridique" Relationship="Self.FK_Piece_ProcedureJuridique" FromRole="Piece" ToRole="ProcedureJuridique" />
+        </EntityType>
+        <EntityType Name="ProcedureJuridique">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Description" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="DateCreation" Type="DateTime" Precision="3" />
+          <Property Name="IdAffaire" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Affaire" Relationship="Self.FK_ProcedureJuridique_Affaire" FromRole="ProcedureJuridique" ToRole="Affaire" />
+          <NavigationProperty Name="Piece" Relationship="Self.FK_Piece_ProcedureJuridique" FromRole="ProcedureJuridique" ToRole="Piece" />
+        </EntityType>
+        <EntityType Name="RendezVous">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nom" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Prenom" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateNaissance" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="NomJuriste" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DateRdv" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="IdCompte" Type="Int32" />
+          <NavigationProperty Name="Compte" Relationship="Self.FK_RendezVous_Compte" FromRole="RendezVous" ToRole="Compte" />
+        </EntityType>
+        <Association Name="FK_Adherent_Compte">
+          <End Role="Compte" Type="Self.Compte" Multiplicity="1" />
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adherent">
+              <PropertyRef Name="IdCompte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Adherent_Dossier">
+          <End Role="Dossier" Type="Self.Dossier" Multiplicity="1" />
+          <End Role="Adherent" Type="Self.Adherent" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dossier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Adherent">
+              <PropertyRef Name="IdDossier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Affaire_Dossier">
+          <End Role="Dossier" Type="Self.Dossier" Multiplicity="1" />
+          <End Role="Affaire" Type="Self.Affaire" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Dossier">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Affaire">
+              <PropertyRef Name="IdDossier" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_ProcedureJuridique_Affaire">
+          <End Role="Affaire" Type="Self.Affaire" Multiplicity="1" />
+          <End Role="ProcedureJuridique" Type="Self.ProcedureJuridique" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Affaire">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="ProcedureJuridique">
+              <PropertyRef Name="IdAffaire" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Dossier_Compte">
+          <End Role="Compte" Type="Self.Compte" Multiplicity="0..1" />
+          <End Role="Dossier" Type="Self.Dossier" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Dossier">
+              <PropertyRef Name="IdCompte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_RendezVous_Compte">
+          <End Role="Compte" Type="Self.Compte" Multiplicity="0..1" />
+          <End Role="RendezVous" Type="Self.RendezVous" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Compte">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="RendezVous">
+              <PropertyRef Name="IdCompte" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Piece_ProcedureJuridique">
+          <End Role="ProcedureJuridique" Type="Self.ProcedureJuridique" Multiplicity="1" />
+          <End Role="Piece" Type="Self.Piece" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ProcedureJuridique">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Piece">
+              <PropertyRef Name="IdProcedure" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="CabinetAvocatEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Adherent" EntityType="Self.Adherent" />
+          <EntitySet Name="Affaire" EntityType="Self.Affaire" />
+          <EntitySet Name="Compte" EntityType="Self.Compte" />
+          <EntitySet Name="Dossier" EntityType="Self.Dossier" />
+          <EntitySet Name="Piece" EntityType="Self.Piece" />
+          <EntitySet Name="ProcedureJuridique" EntityType="Self.ProcedureJuridique" />
+          <EntitySet Name="RendezVous" EntityType="Self.RendezVous" />
+          <AssociationSet Name="FK_Adherent_Compte" Association="Self.FK_Adherent_Compte">
+            <End Role="Compte" EntitySet="Compte" />
+            <End Role="Adherent" EntitySet="Adherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Adherent_Dossier" Association="Self.FK_Adherent_Dossier">
+            <End Role="Dossier" EntitySet="Dossier" />
+            <End Role="Adherent" EntitySet="Adherent" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Affaire_Dossier" Association="Self.FK_Affaire_Dossier">
+            <End Role="Dossier" EntitySet="Dossier" />
+            <End Role="Affaire" EntitySet="Affaire" />
+          </AssociationSet>
+          <AssociationSet Name="FK_ProcedureJuridique_Affaire" Association="Self.FK_ProcedureJuridique_Affaire">
+            <End Role="Affaire" EntitySet="Affaire" />
+            <End Role="ProcedureJuridique" EntitySet="ProcedureJuridique" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Dossier_Compte" Association="Self.FK_Dossier_Compte">
+            <End Role="Compte" EntitySet="Compte" />
+            <End Role="Dossier" EntitySet="Dossier" />
+          </AssociationSet>
+          <AssociationSet Name="FK_RendezVous_Compte" Association="Self.FK_RendezVous_Compte">
+            <End Role="Compte" EntitySet="Compte" />
+            <End Role="RendezVous" EntitySet="RendezVous" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Piece_ProcedureJuridique" Association="Self.FK_Piece_ProcedureJuridique">
+            <End Role="ProcedureJuridique" EntitySet="ProcedureJuridique" />
+            <End Role="Piece" EntitySet="Piece" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CabinetAvocatModelStoreContainer" CdmEntityContainer="CabinetAvocatEntities">
+          <EntitySetMapping Name="Adherent">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.Adherent">
+              <MappingFragment StoreEntitySet="Adherent">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="Adresse" ColumnName="Adresse" />
+                <ScalarProperty Name="Adresse2" ColumnName="Adresse2" />
+                <ScalarProperty Name="Tel" ColumnName="Tel" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="DateNaissance" ColumnName="DateNaissance" />
+                <ScalarProperty Name="DateCreation" ColumnName="DateCreation" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IdCompte" ColumnName="IdCompte" />
+                <ScalarProperty Name="IdDossier" ColumnName="IdDossier" />
+                <ScalarProperty Name="Etat" ColumnName="Etat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Affaire">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.Affaire">
+              <MappingFragment StoreEntitySet="Affaire">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Etat" ColumnName="Etat" />
+                <ScalarProperty Name="IdDossier" ColumnName="IdDossier" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Compte">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.Compte">
+              <MappingFragment StoreEntitySet="Compte">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="MotDePasse" ColumnName="MotDePasse" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="TypeCompte" ColumnName="TypeCompte" />
+                <ScalarProperty Name="Etat" ColumnName="Etat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Dossier">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.Dossier">
+              <MappingFragment StoreEntitySet="Dossier">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="IdCompte" ColumnName="IdCompte" />
+                <ScalarProperty Name="DateCreation" ColumnName="DateCreation" />
+                <ScalarProperty Name="Etat" ColumnName="Etat" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Piece">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.Piece">
+              <MappingFragment StoreEntitySet="Piece">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Descreption" ColumnName="Descreption" />
+                <ScalarProperty Name="path" ColumnName="path" />
+                <ScalarProperty Name="IdProcedure" ColumnName="IdProcedure" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ProcedureJuridique">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.ProcedureJuridique">
+              <MappingFragment StoreEntitySet="ProcedureJuridique">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="DateCreation" ColumnName="DateCreation" />
+                <ScalarProperty Name="IdAffaire" ColumnName="IdAffaire" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RendezVous">
+            <EntityTypeMapping TypeName="CabinetAvocatModel.RendezVous">
+              <MappingFragment StoreEntitySet="RendezVous">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nom" ColumnName="Nom" />
+                <ScalarProperty Name="Prenom" ColumnName="Prenom" />
+                <ScalarProperty Name="DateNaissance" ColumnName="DateNaissance" />
+                <ScalarProperty Name="NomJuriste" ColumnName="NomJuriste" />
+                <ScalarProperty Name="DateRdv" ColumnName="DateRdv" />
+                <ScalarProperty Name="IdCompte" ColumnName="IdCompte" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Aucun" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
